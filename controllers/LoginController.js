@@ -10,7 +10,6 @@ const LoginController = {
 
       // Find the user in the database based on the requested username
       const user = await UserModel.findOne({ username });
-      console.log(user)
 
       if (!user) {
         // Username not found, set session flag and redirect to login page

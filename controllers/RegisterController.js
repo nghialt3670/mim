@@ -6,9 +6,8 @@ const RegisterController = {
   // Handle user registration
   handleRegister: async (req, res) => {
     try {
+      // Get username and password from request
       const { username, password } = req.body;
-
-      console.log(password)
 
       // Hash the user's password
       const hashedPassword = await bcrypt.hash(password, 10);
