@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="/styles.css">
+  <title>Create A Mim Account</title>
+</head>
+<body>
+  <div class="container">
+    <form action="/register" method="post" id="register-form" class="form" onsubmit="return validateForm()">
+      <h2>Join with us!</h2>
+      <input type="text" id="username" name="username" placeholder="Username" required>
+      <div id="invalid-username" class="error-message"></div>
+      <% if (username_already_exists) { %>
+        <div id="username-already-exists" class="error-message">Username already exists</div>
+      <% } %>
+      <input type="password" id="password" name="password" placeholder="Password" required>
+      <div id="invalid-password" class="error-message"></div>
+      <input type="password" id="confirm-password" placeholder="Confirm password" required>
+      <div id="confirm-password-error" class="error-message"></div>
+      <button type="submit" class="login-button">Register</button>
+      <p class="login-register-redirect">Already have an account? <a href="/login">Log in</a></p>
+    </form>
+  </div>  
+    <script>
+      function validateForm() {
+        // Reset previous error messages
+        document.getElementById("invalid-username").innerHTML = "";
+        document.getElementById("invalid-password").innerHTML = "";
+        document.getElementById("confirm-password-error").innerHTML = "";
+
+        // Get the input values
+        var username = document.getElementById("username").value;
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirm-password").value;
+
+        // Perform username validation
+        var usernameRegex = /^[a-zA-Z0-9_-]{6,16}$/;
+        if (!usernameRegex.test(username)) {
+          document.getElementById("invalid-username").innerHTML = "Invalid username. Please use 6-16 characters, including letters, numbers, hyphens, and underscores.";
+          return false;
+        }
+
+        // Perform password validation
+        if (password.length < 6) {
+          document.getElementById("invalid-password").innerHTML = "Password must be at least 6 characters long.";
+          return false;
+        }
+
+        // Perform password confirmation validation
+        if (password !== confirmPassword) {
+          document.getElementById("confirm-password-error").innerHTML = "Passwords do not match.";
+          return false;
+        }
+
+        // If all validations pass, the form will be submitted
+        return true;
+      }
+    </script>
+  </div>
+</body>
+</html>
