@@ -4,12 +4,54 @@ body {
   font-family: 'Roboto Mono', monospace;
   text-decoration: none;
   background-color: #738eb1; 
+  outline: none;
+}
+
+input, button {
+  font-size: large;
+  border: 2px solid black;
+  margin: 10px;
+  padding: 10px;
+  font-family: inherit;
+  font-weight: bold;
 }
 
 button {
   background-color: #9f71ba;
-  font-family: inherit;
-  font-weight: bold;
   cursor: pointer;
+}
+
+input {
+  width: 80%;
+}
+
+input:focus {
+  outline: none;
+}
+
+.container, .form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.form {
+  background-color: #b5e0dcbd;
+  height: fit-content;
+  width: 350px;
+  border: 3px solid black;
+}
+
+.login-register-redirect a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-message {
+  color: red;
+  width: 80%;
 }
 
