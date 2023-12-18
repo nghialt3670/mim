@@ -1,7 +1,14 @@
 const express = require('express');
 const router = express.Router();
+const multer = require('multer');
 const LoginController = require('../controllers/LoginController');
 const RegisterController = require('../controllers/RegisterController');
+const PostController = require('../controllers/PostController');
+
+
+// Multer setup
+const storage = multer.memoryStorage(); // Store the file in memory as Buffer
+const upload = multer({ storage: storage });
 
 router.get('/', (req, res) => {
   res.render('index');
@@ -21,9 +28,19 @@ router.get('/login', (req, res) => {
   res.render('login', { username_not_found, wrong_password});
 });
 
+router.get('/post-upload', (req, res) => {
+  if (req.session.username) {
+    res.render('upload');
+    return
+  }
+  res.redirect('/');
+})
+
 router.post('/register', RegisterController.handleRegister);
 
 router.post('/login', LoginController.handleLogin);
+
+router.post('/post-upload', upload.single('image'), PostController.handlePostUpload)
 
 
 module.exports = router;
