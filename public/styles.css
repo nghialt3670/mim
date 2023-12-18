@@ -86,3 +86,7 @@ input:focus {
   border-color: #8e6868;
   background-color: #27425a; /* Light blue background when hovering */
 }
+
+input[type="file"] {
+  display: none;
+}
