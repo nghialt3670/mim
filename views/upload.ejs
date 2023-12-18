@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <title>Upload Your Meme</title>
+</head>
+<body>
+  <div class="container">
+    <form id="upload-form" class="form" action="/post-upload" method="post" enctype="multipart/form-data" onsubmit="setTime()">
+      <input type="text" name="caption" id="upload-caption" placeholder="Enter your caption" autocomplete="off">
+      <input type="file" name="image" id="upload-image" accept="image/*" required onchange="previewImage()">
+      <div id="drop-zone" 
+          class="drop-zone" 
+          onclick="handleClick()"
+          ondrop="handleDrop(event)" 
+          ondragover="handleDragOver(event)" 
+          ondragleave="handleDragLeave(event)">
+        <p>Click or drag and drop your meme here</p>
+      </div>
+      <img id="image-preview" alt="Image Preview">
+      <input type="hidden" name="timeCreate" id="time-create">
+      <button type="submit">Upload</button>
+    </form>
+  </div>
+
+  <script>
+    const preview = document.getElementById('image-preview');
+    preview.style.display = 'none';
+
+    function previewImage() {
+      const input = document.getElementById('upload-image');
+      const preview = document.getElementById('image-preview');
+      const file = input.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        // Hide the drop zone after an image is selected
+        document.getElementById('drop-zone').style.display = 'none';
+        // Show the image preview
+        preview.style.display = 'block';
+      } else {
+        // If no file is selected, show the drop zone and hide the image preview
+        document.getElementById('drop-zone').style.display = 'block';
+        preview.style.display = 'none';
+      }
+    }
+
+    function handleDrop(event) {
+      event.preventDefault();
+      const files = event.dataTransfer.files;
+      const input = document.getElementById('image');
+      input.files = files;
+      previewImage();
+    }
+
+    function handleDragOver(event) {
+      event.preventDefault();
+      const dropZone = document.getElementById('drop-zone');
+      dropZone.classList.add('hover');
+    }
+
+    function handleDragLeave(event) {
+      event.preventDefault();
+      const dropZone = document.getElementById('drop-zone');
+      dropZone.classList.remove('hover');
+    }
+
+    function setTime() {
+      const currentTime = new Date();
+      document.getElementById('time-create').value = currentTime.toISOString();
+    }
+
+    function handleClick() {
+      document.getElementById('upload-image').click();
+    }
+
+  </script>
+</body>
+</html>

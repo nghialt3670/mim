@@ -55,3 +55,34 @@ input:focus {
   width: 80%;
 }
 
+#upload-form {
+  width: 500px;
+  padding: 30px;
+  background-color: #f9f9f9;
+  text-align: center;
+  background-color: #b5e0dcbd;
+}
+
+#upload-caption {
+  width: 100%;
+}
+
+#image-preview {
+  max-width: 100%;
+  margin: 10px;
+  border: 3px solid black;
+}
+
+#drop-zone {
+  height: 200px;
+  width: 100%;
+  margin: 10px;
+  padding: 10px;
+  border: 3px dashed black;
+  cursor: pointer;
+}
+
+#drop-zone.hover {
+  border-color: #8e6868;
+  background-color: #27425a; /* Light blue background when hovering */
+}
