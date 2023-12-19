@@ -4,13 +4,18 @@ const multer = require('multer');
 const LoginController = require('../controllers/LoginController');
 const RegisterController = require('../controllers/RegisterController');
 const PostController = require('../controllers/PostController');
-
+const HomeController = require('../controllers/HomeController')
 
 // Multer setup
 const storage = multer.memoryStorage(); // Store the file in memory as Buffer
 const upload = multer({ storage: storage });
 
 router.get('/', (req, res) => {
+  if (req.session.username) {
+    HomeController.handleHomePage(req, res);
+    return;
+  }
+
   res.render('index');
 });
 
@@ -33,6 +38,11 @@ router.get('/post-upload', (req, res) => {
     res.render('upload');
     return
   }
+  res.redirect('/');
+})
+
+router.get('/logout', (req, res) => {
+  req.session.destroy();
   res.redirect('/');
 })
 
