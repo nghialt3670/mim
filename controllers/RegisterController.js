@@ -1,4 +1,5 @@
 const UserModel = require('../models/UserModel');
+const ImageModel = require('../models/ImageModel')
 const bcrypt = require('bcrypt');
 
 
@@ -25,6 +26,26 @@ const RegisterController = {
           username: username,
           password: hashedPassword,
         });
+
+        const defaultAvatar = await ImageModel.findOne({ type: 'default-avatar'});
+
+        if (!defaultAvatar) {
+          // Read the default avatar image file and convert it into a Buffer
+          const defaultAvatarPath = path.join(process.cwd(), 'public/images/default_avatar.webp');
+          const defaultAvatarBuffer = fs.readFileSync(defaultAvatarPath);
+          // Create a new instance of ImageModel with the image data and content type
+          defaultAvatar = new ImageModel({
+            data: defaultAvatarBuffer,
+            contentType: 'image/webp',
+            type: 'default-avatar'
+          });
+
+          // Save the new image instance to the database
+          await defaultAvatar.save();
+        }
+        
+        // Set the default avatar for the user
+        newUser.avatar = defaultAvatar._id;
 
         // Save the new user to the database
         await newUser.save();
