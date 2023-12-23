@@ -36,13 +36,15 @@
               <img id="image" class="image" src="data:<%= post.image.contentType %>;base64,<%= post.image.data.toString('base64') %>" alt="Image">
               <div id="like-comment-btn" class="like-comment-section">
                 <div id="like">
-                    <button id="like-btn" onclick="setNumLikes('<%= post.id %>')">&#128528</button>
+                    <button id="like-btn" onclick="handleLike('<%= post.id %>', '<%= user.username %>')">
+                    <% if (post.liked) { %>
+                      <div>&#128514</div>
+                    <% } else { %>
+                      <div>&#128528</div>
+                    <% } %>
+                    </button>
                     <p id="num-likes">(<%= post.numLikes %>)</p>
-                    <div id="like-check">0</div>
-                </div>
-                <div id="comment">
-                    <button id="comment-btn">&#128490</button>
-                    <p id="num-comments">(<%= post.numComments %>)</p>
+                    <div id="haha-emoji" class="no-display">&#128528</div>
                 </div>
               </div>
             </li>
@@ -74,20 +76,30 @@
       var likedPost = document.getElementById(postId);
       var likeButton = likedPost.querySelector('#like-btn');
       var numLikesEntity = likedPost.querySelector('#num-likes');
-      var likeCheckEntity = likedPost.querySelector('#like-check')
+      var emoji = likeButton.querySelector("div");
       var numLikes = numLikesEntity.innerHTML;
       var newLikeCount;
-      if (likeCheckEntity.innerHTML == '0') {
+
+      if (emoji.innerHTML === document.getElementById('haha-emoji').innerHTML) {
         newLikeCount = Number(numLikes.slice(1, numLikes.length - 1)) + 1;
-        likeCheckEntity.innerHTML = '1';
-        likeButton.innerHTML = '&#128514'
+        emoji.innerHTML = '&#128514'
       } else {
         newLikeCount = Number(numLikes.slice(1, numLikes.length - 1)) - 1;
-        likeCheckEntity.innerHTML = '0';
-        likeButton.innerHTML = '&#128528'
+        emoji.innerHTML = '&#128528'
       }
       numLikesEntity.innerHTML = '(' + newLikeCount + ')';
+    }
 
+    function handleLike(postId, username) {
+      setNumLikes(postId)
+
+      fetch('/update-like', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postId: postId }),
+      });
     }
   </script>
 </body>

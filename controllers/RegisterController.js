@@ -1,6 +1,8 @@
 const UserModel = require('../models/UserModel');
 const ImageModel = require('../models/ImageModel')
 const bcrypt = require('bcrypt');
+const path = require('path');
+const fs = require('fs');
 
 
 const RegisterController = {
@@ -27,7 +29,7 @@ const RegisterController = {
           password: hashedPassword,
         });
 
-        const defaultAvatar = await ImageModel.findOne({ type: 'default-avatar'});
+        let defaultAvatar = await ImageModel.findOne({ type: 'default-avatar'});
 
         if (!defaultAvatar) {
           // Read the default avatar image file and convert it into a Buffer

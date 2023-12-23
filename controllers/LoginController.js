@@ -21,7 +21,7 @@ const LoginController = {
         res.redirect('/login');
       } else {
         // Login successful, set user session and redirect to home page
-        req.session.username = username;
+        req.session.userId = user._id;
         res.redirect('/');
       }
     } catch (error) {

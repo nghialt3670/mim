@@ -251,6 +251,6 @@ input[type="file"] {
   margin-left: 30px;
 }
 
-#like-check {
+.no-display {
   display: none;
 }

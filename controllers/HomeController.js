@@ -5,8 +5,8 @@ const UserModel = require('../models/UserModel');
 const HomeController = {
 	handleHomePage: async (req, res) => {
     try {
-      const username = req.session.username;
-      const user = await UserModel.findOne({ username }).populate('avatar');
+      const userId = req.session.userId;
+      const user = await UserModel.findById(userId).populate('avatar');
 
       // Find all current posts and sort according to likes
       const posts = await PostModel.find({})
@@ -23,7 +23,7 @@ const HomeController = {
         caption: post.caption,
         image: post.image,
         numLikes: post.likes.length,
-        numComments: post.comments.length
+        liked: user.likedPosts.findIndex(likedPost => (likedPost._id.equals(post._id))) !== -1 ? true : false
       }));
 
 		  res.render('home', { user: user, posts: postDtos });

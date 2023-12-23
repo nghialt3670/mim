@@ -10,8 +10,11 @@ const app = express();
 // Defining the port number for the server to listen on.
 const PORT = 3000;
 
-// Connecting to the MongoDB database named 'nodejs_mvc_app'.
-mongoose.connect('mongodb://localhost/nodejs_mvc_app');
+// Connecting to the MongoDB database named 'mim'.
+mongoose.connect('mongodb://localhost/mim');
+
+// Middleware to parse JSON
+app.use(express.json());
 
 // Configuring middleware to parse incoming URL-encoded data and populate the req.body object.
 app.use(bodyParser.urlencoded({ extended: true }));

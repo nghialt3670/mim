@@ -4,14 +4,15 @@ const multer = require('multer');
 const LoginController = require('../controllers/LoginController');
 const RegisterController = require('../controllers/RegisterController');
 const PostController = require('../controllers/PostController');
-const HomeController = require('../controllers/HomeController')
+const HomeController = require('../controllers/HomeController');
+const LikeController = require('../controllers/LikeController');
 
 // Multer setup
 const storage = multer.memoryStorage(); // Store the file in memory as Buffer
 const upload = multer({ storage: storage });
 
 router.get('/', (req, res) => {
-  if (req.session.username) {
+  if (req.session.userId) {
     HomeController.handleHomePage(req, res);
     return;
   }
@@ -34,7 +35,7 @@ router.get('/login', (req, res) => {
 });
 
 router.get('/post-upload', (req, res) => {
-  if (req.session.username) {
+  if (req.session.userId) {
     res.render('upload');
     return
   }
@@ -52,6 +53,9 @@ router.post('/login', LoginController.handleLogin);
 
 router.post('/post-upload', upload.single('image'), PostController.handlePostUpload)
 
+router.post('/update-like', LikeController.handleLike)
+
+// router.post('/update-comment', CommentController.handleComment)
 
 module.exports = router;
 

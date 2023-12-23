@@ -11,7 +11,7 @@ const PostController = {
       const { caption, timeCreate } = req.body;
       const { buffer, mimetype } = req.file;
 
-      const user = await UserModel.findOne({ username: req.session.username });
+      const user = await UserModel.findById(req.session.userId);
       
       // Create and save the image
       const image = new ImageModel({
