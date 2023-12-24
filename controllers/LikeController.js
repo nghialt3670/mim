@@ -6,6 +6,7 @@ const LikeController = {
   handleLike: async (req, res) => {
     const userId = req.session.userId;
     const { postId } = req.body;
+    
     const existingLike = await LikeModel.findOne({ user: userId, post: postId });
 
     if (existingLike) {
@@ -31,9 +32,7 @@ const LikeController = {
 
       // Add post reference to the User model
       await UserModel.findByIdAndUpdate(userId, { $push: { likedPosts: postId } });
-
     }
-    const user = await UserModel.findById(userId);
   }
 } 
 

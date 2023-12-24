@@ -53,9 +53,7 @@ router.post('/login', LoginController.handleLogin);
 
 router.post('/post-upload', upload.single('image'), PostController.handlePostUpload)
 
-router.post('/update-like', LikeController.handleLike)
-
-// router.post('/update-comment', CommentController.handleComment)
+router.post('/update-like', LikeController.handleUpdateLike)
 
 module.exports = router;
 
