@@ -3,10 +3,10 @@ const PostModel = require('../models/PostModel');
 const UserModel = require('../models/UserModel')
 
 const LikeController = {
-  handleLike: async (req, res) => {
+  handleUpdateLike: async (req, res) => {
     const userId = req.session.userId;
     const { postId } = req.body;
-    
+
     const existingLike = await LikeModel.findOne({ user: userId, post: postId });
 
     if (existingLike) {
