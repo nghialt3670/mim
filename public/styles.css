@@ -7,6 +7,12 @@ body {
   outline: none;
 }
 
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none; /* Removes the default list-style (bullets) */
+}
+
 input, button {
   border-radius: 5px;
   font-size: large;
@@ -105,12 +111,17 @@ input[type="file"] {
 }
 
 #newsfeed {
+  position: relative;
   transition: 0.5s;
   background-color: #738eb1; 
   margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#post-list {
+.post-list {
+  width: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -122,7 +133,7 @@ input[type="file"] {
   flex-direction: column;
   width: 500px;
   background-color: #b5d6e0;
-  margin: 50px 0px;
+  margin-bottom: 50px;
   border-radius: 10px;
 }
 
@@ -231,7 +242,9 @@ input[type="file"] {
 }
 
 #sidebar-toggle-btn {
-  position: fixed;
+  position: absolute;
+  left: 0px;
+  top: 0px;
   height: 40px;
   width: 40px;
   background-color: #b5e0dcbd;
@@ -253,4 +266,31 @@ input[type="file"] {
 
 .no-display {
   display: none;
+}
+
+.container .avatar {
+  width: 200px;
+  margin-top: 20px;
+}
+
+.container .username {
+  font-size: xx-large;
+  margin: 0px 0px 10px 0px;
+}
+
+.profile .container {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  background-color: #b5d6e0;
+  margin: 50px 0px;
+  border-radius: 10px;  
+  height: fit-content;
+}
+
+.profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
+  <title><%= profile.username %></title>
+</head>
+<body>
+  <div class="profile">
+    <div id="profile-container" class="container">
+      <img class="avatar" src="<%= profile.avatar ? 'data:' + profile.avatar.imageContentType + ';base64,' + (profile.avatar.data ? profile.avatar.data.toString('base64') : '') : '' %>" alt="Avatar">
+      <h4 class="username"><%= profile.username %></h4>
+    </div>
+    <div class="post-list">
+      <% if (profile.posts.length > 0) { %>
+        <ul>
+          <% profile.posts.forEach(post => { %>
+            <li id="<%= post.id %>" class="post">
+              <div class="avatar-username">
+                <img class="avatar" src="<%= post.avatar ? 'data:' + post.imageContentType + ';base64,' + (post.avatar.data ? post.avatar.data.toString('base64') : '') : '' %>" alt="Avatar">
+                <a href="" class="username"><%= post.author %></a>
+              </div>
+              <p id="caption"><%= post.caption %></p>
+              <img id="image" class="image" src="data:<%= post.image.contentType %>;base64,<%= post.image.data.toString('base64') %>" alt="Image">
+              <div id="like-comment-btn" class="like-comment-section">
+                <div id="like">
+                    <button id="like-btn" onclick="handleLike('<%= post.id %>', '<%= user.username %>')">
+                    <% if (post.liked) { %>
+                      <div>&#128514</div>
+                    <% } else { %>
+                      <div>&#128528</div>
+                    <% } %>
+                    </button>
+                    <p id="num-likes">(<%= post.numLikes %>)</p>
+                    <div id="haha-emoji" class="no-display">&#128528</div>
+                </div>
+              </div>
+            </li>
+          <% }) %>
+        </ul>
+      <% } %>
+    </div>
+  </div>
+	<script>
+    function setTime() {
+      const currentTime = new Date();
+      document.getElementById('timeCreate').value = currentTime.toISOString();
+    }
+
+    function toggleSidebar() {
+      var sidebar = document.getElementById('sidebar');
+      var newsfeed = document.getElementById('newsfeed');
+
+      if (sidebar.style.left === "-3px") {
+        sidebar.style.left = "-303px";
+        newsfeed.style.marginLeft = "0";
+      } else {
+        sidebar.style.left = "-3px";
+        newsfeed.style.marginLeft = "300px";
+      }
+    }
+
+    function setNumLikes(postId) {
+      var likedPost = document.getElementById(postId);
+      var likeButton = likedPost.querySelector('#like-btn');
+      var numLikesEntity = likedPost.querySelector('#num-likes');
+      var emoji = likeButton.querySelector("div");
+      var numLikes = numLikesEntity.innerHTML;
+      var newLikeCount;
+
+      if (emoji.innerHTML === document.getElementById('haha-emoji').innerHTML) {
+        newLikeCount = Number(numLikes.slice(1, numLikes.length - 1)) + 1;
+        emoji.innerHTML = '&#128514'
+      } else {
+        newLikeCount = Number(numLikes.slice(1, numLikes.length - 1)) - 1;
+        emoji.innerHTML = '&#128528'
+      }
+      numLikesEntity.innerHTML = '(' + newLikeCount + ')';
+    }
+
+    function handleLike(postId, username) {
+      setNumLikes(postId)
+
+      fetch('/update-like', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ postId: postId }),
+      });
+    }
+  </script>
+</body>
+</html>
