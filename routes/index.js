@@ -6,6 +6,7 @@ const RegisterController = require('../controllers/RegisterController');
 const PostController = require('../controllers/PostController');
 const HomeController = require('../controllers/HomeController');
 const LikeController = require('../controllers/LikeController');
+const ProfileController = require('../controllers/ProfileController');
 
 // Multer setup
 const storage = multer.memoryStorage(); // Store the file in memory as Buffer
@@ -47,13 +48,21 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 })
 
+router.get('/profile/:username', (req, res) => {
+  if (req.session.userId) {
+    ProfileController.handleLoadProfile(req, res);
+    return;
+  }
+  res.redirect('/')
+});
+
 router.post('/register', RegisterController.handleRegister);
 
 router.post('/login', LoginController.handleLogin);
 
-router.post('/post-upload', upload.single('image'), PostController.handlePostUpload)
+router.post('/post-upload', upload.single('image'), PostController.handlePostUpload);
 
-router.post('/update-like', LikeController.handleUpdateLike)
+router.post('/update-like', LikeController.handleUpdateLike);
 
 module.exports = router;
 
