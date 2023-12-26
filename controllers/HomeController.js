@@ -8,12 +8,12 @@ const HomeController = {
       const userId = req.session.userId;
       const user = await UserModel.findById(userId).populate('avatar');
 
-      // Find all current posts and sort according to likes
+      // Find all current posts and sort according to timeCreated
       const posts = await PostModel.find({})
-        .populate({path: 'author', select: 'username avatar', populate: { path: 'avatar' }})
-        .populate('image');
-
-      posts.sort((post1, post2) => (post1.likes.length - post2.likes.length)); 
+        .populate({ path: 'author', select: 'username avatar', populate: { path: 'avatar' } })
+        .populate('image')
+        .sort({ timeCreate: -1 })
+        .exec();
 
       // Map post model data to post dto 
       const postDtos = posts.map(post => ({

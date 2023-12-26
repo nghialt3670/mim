@@ -8,29 +8,23 @@
 </head>
 <body>
   <div id="sidebar">
-    <a href="/profile">
-      <div class="avatar-username" href>
-        <img class="avatar" src="data:<%= user.avatar.contentType %>;base64,<%= user.avatar.data.toString('base64') %>" alt="Image">
-        <div class="username"><%= user.username %></div>
-      </div>
-    </a>
     <div id="user-navigation">
-      <a href="/profile">My Profile</a>
-      <a href="/post-upload">Upload New Meme</a>
-      <a href="/settings">Settings</a>
+      <a href="/profile/<%= user.username %>">My Profile</a>
+      <a href="/liked-post">Liked Meme</a>
+      <a href="/post-upload">Upload Meme</a>
       <a href="/logout">Log Out</a>
     </div>
   </div>
   <div id="newsfeed">
-    <button id="sidebar-toggle-btn" onclick="toggleSidebar()">=</button>
-    <div id="post-list">
+    <button id="sidebar-toggle-btn" onclick="toggleSidebar()">=</button>  
+    <div class="post-list">
       <% if (posts) { %>
         <ul>
           <% posts.forEach(post => { %>
             <li id="<%= post.id %>" class="post">
               <div class="avatar-username">
                 <img class="avatar" src="<%= post.avatar ? 'data:' + post.imageContentType + ';base64,' + (post.avatar.data ? post.avatar.data.toString('base64') : '') : '' %>" alt="Avatar">
-                <a href="" class="username"><%= post.author %></a>
+                <a href="/profile/<%= post.author%>" class="username"><%= post.author %></a>
               </div>
               <p id="caption"><%= post.caption %></p>
               <img id="image" class="image" src="data:<%= post.image.contentType %>;base64,<%= post.image.data.toString('base64') %>" alt="Image">
