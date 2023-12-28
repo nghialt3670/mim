@@ -64,5 +64,10 @@ router.post('/post-upload', upload.single('image'), PostController.handlePostUpl
 
 router.post('/update-like', LikeController.handleUpdateLike);
 
+router.post('/edit-caption', PostController.handleEditCaption);
+
+router.post('/delete-post', PostController.handleDeletePost);
+
+
 module.exports = router;
 

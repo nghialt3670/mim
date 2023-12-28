@@ -111,21 +111,27 @@ input[type="file"] {
   border-radius: 50%;
 }
 
-#newsfeed {
-  position: relative;
+.newsfeed {
+  position: fixed; /* or 'absolute' based on your design requirements */
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   transition: 0.5s;
   background-color: #738eb1; 
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+  overflow: auto;
 }
 
+
 .post-list {
+  height: 100vh;
   width: 500px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
@@ -133,9 +139,11 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   width: 500px;
-  background-color: #b5d6e0;
+  background-color: #ffffffc6;
+  margin-top: 10px;
   margin-bottom: 50px;
   border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Adjust values as needed */
 }
 
 .post a {
@@ -149,7 +157,12 @@ input[type="file"] {
   padding-right: -10px;
   border: none;
   font-size: xx-large;
-  background-color: #b5d6e0;
+  background-color: transparent;
+  transition: transform 0.3s ease;
+}
+
+.post button:hover {
+  transform: scale(1.2);
 }
 
 #comment-btn {
@@ -173,6 +186,11 @@ input[type="file"] {
   font-weight: bold;
   display: flex;
   align-items: flex-start;
+  transition: 0.3s;
+}
+
+.post .username:hover {
+  transform: scale(1.1);
 }
 
 .post #caption {
@@ -196,7 +214,7 @@ input[type="file"] {
   position: fixed;
   top: 0;
   left: -303px;
-  background-color: #b5d6e0;
+  background-color: #ffffffd1;
   padding-top: 10px;
   transition: 0.5s;
   display: flex;
@@ -232,6 +250,7 @@ input[type="file"] {
 }
 
 #user-navigation {
+  padding-top: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -239,8 +258,14 @@ input[type="file"] {
 
 #user-navigation a {
   font-weight: bolder;
+  font-size: large;
   margin: 10px;
   color: black;
+  transition: 0.3s;
+}
+
+#user-navigation a:hover {
+  transform: scale(1.2);
 }
 
 #caption {
@@ -249,26 +274,19 @@ input[type="file"] {
 }
 
 #sidebar-toggle-btn {
-  position: absolute;
+  position: fixed;
   left: 0px;
   top: 0px;
   height: 40px;
   width: 40px;
-  background-color: #b5e0dcbd;
+  background-color: #4b75cadf;
+  padding: 7px;
 }
 
-#like-comment-btn {
+
+#like {
   display: flex;
   flex-direction: row;
-}
-
-#like, #comment {
-  display: flex;
-  flex-direction: row;
-}
-
-#comment {
-  margin-left: 30px;
 }
 
 .no-display {
@@ -286,11 +304,12 @@ input[type="file"] {
 }
 
 .profile .container {
+  margin-top: 10px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   width: 500px;
-  background-color: #b5d6e0;
-  margin: 50px 0px;
+  background-color: #ffffffc6;
   border-radius: 10px;  
   height: fit-content;
 }
@@ -306,48 +325,10 @@ input[type="file"] {
   position: relative;
 }
 
-.post-options {
+.options {
   position: absolute;
   display: inline-block;
-  right: 10px;
-}
-
-.post-options-btn {
-  font-size: xx-small;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: 30px;
-  height: 30px;
-}
-
-.post-options-btn:hover {
-  position: relative;
-  background-color: #69cbd3;
-}
-
-.post-options-btn img{
-  width: 100%;
-  
-}
-
-.post-options-menu {
-  display: none;
-  position: absolute;
-  background-color: transparent;
-  width: fit-content;
-}
-
-.post-options-menu button {
-  display: block;
-  padding: 8px;
-  margin-bottom: 5px;
-  text-align: left;
-  font-size: x-small;
-  font-weight: normal;
-  width: 60px;
-  background-color: #a276ba;
+  right: 20px;
 }
 
 .time {
@@ -368,3 +349,27 @@ input[type="file"] {
   display: flex;
   align-items: center; /* Align items vertically in the container */
 }
+
+.caption-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.edit-btn, .remove-btn {
+  padding: 0px;
+  margin: 0px;
+}
+
+.edit-btn img, .remove-btn img {
+  width: 20px;
+}
+
+#caption[contenteditable="true"]:focus {
+  outline: none;
+}
+
+button img {
+  max-width: 100%;
+  max-height: 100%;
+}
+

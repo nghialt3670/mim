@@ -7,28 +7,13 @@
   <title>Mim</title>
 </head>
 <body>
-  <script>
-    function adjustTime(utcTimeString) {
-      const utcTime = new Date(utcTimeString);
-      const userTimeZoneOffset = new Date().getTimezoneOffset();
-      const localTime = new Date(utcTime.getTime() - userTimeZoneOffset * 60000);
-      
-      // You can customize the time format as needed
-      return localTime.toLocaleString();
-    }
-  </script>
-  <div id="sidebar">
-    <div id="user-navigation">
-      <a href="/profile/<%= user.username %>">My Profile</a>
-      <a href="/liked-post">Liked Meme</a>
-      <a href="/post-upload">Upload Meme</a>
-      <a href="/logout">Log Out</a>
-    </div>
-  </div>
-  <div id="newsfeed">
-    <button id="sidebar-toggle-btn" onclick="toggleSidebar()">=</button>  
+  <%- include('sidebar.ejs') %>
+  <div class="newsfeed">
+    <button id="sidebar-toggle-btn" onclick="toggleSidebar()">
+      <img src="/images/menu_icon.png" alt="">
+    </button>  
     <div class="post-list">
-      <% if (posts) { %>
+      <% if (posts.length > 0) { %>
         <ul>
           <% posts.forEach(post => { %>
             <li id="<%= post.id %>" class="post">
@@ -37,43 +22,14 @@
                 <div class="username-container">
                   <a href="/profile/<%= post.author%>" class="username"><%= post.author %></a>
                   <div class="time">
-                    <%
-                      function adjustTime(utcTimeString) {
-                        const utcTime = new Date(utcTimeString);
-                        const currentTime = new Date();
-                        const timeDifference = currentTime - utcTime;
-
-                        // Convert milliseconds to seconds
-                        const seconds = Math.floor(timeDifference / 1000);
-
-                        if (seconds < 60) {
-                          return seconds === 1 ? "1 second ago" : seconds + " seconds ago";
-                        } else if (seconds < 3600) {
-                          const minutes = Math.floor(seconds / 60);
-                          return minutes === 1 ? "1 minute ago" : minutes + " minutes ago";
-                        } else if (seconds < 86400) {
-                          const hours = Math.floor(seconds / 3600);
-                          return hours === 1 ? "1 hour ago" : hours + " hours ago";
-                        } else if (seconds < 2592000) {
-                          const days = Math.floor(seconds / 86400);
-                          return days === 1 ? "1 day ago" : days + " days ago";
-                        } else if (seconds < 31536000) {
-                          const months = Math.floor(seconds / 2592000);
-                          return months === 1 ? "1 month ago" : months + " months ago";
-                        } else {
-                          const years = Math.floor(seconds / 31536000);
-                          return years === 1 ? "1 year ago" : years + " years ago";
-                        }
-                      }
-                    %>
-                    <%= adjustTime(post.timeCreate) %>
+                    <%= helper.adjustTime(post.timeCreate) %>
                   </div>
                 </div>
               </div>
               <p id="caption"><%= post.caption %></p>
               <img id="image" class="image" src="data:<%= post.image.contentType %>;base64,<%= post.image.data.toString('base64') %>" alt="Image">
               <div id="like">
-                  <button id="like-btn" onclick="handleLike('<%= post.id %>', '<%= user.username %>')">
+                  <button class="like-btn" onclick="handleLike('<%= post.id %>', '<%= user.username %>')">
                     <% if (post.liked) { %>
                       <div>&#128514</div>
                     <% } else { %>
@@ -86,6 +42,7 @@
                     <div>&nbsp;haha)</div>
                     <div id="haha-emoji" class="no-display">&#128528</div>
                   </div>
+                  <div id="like-check" class="no-display"></div>
               </div>
             </li>
           <% }) %> 
@@ -99,22 +56,9 @@
       document.getElementById('timeCreate').value = currentTime.toISOString();
     }
 
-    function toggleSidebar() {
-      var sidebar = document.getElementById('sidebar');
-      var newsfeed = document.getElementById('newsfeed');
-
-      if (sidebar.style.left === "-3px") {
-        sidebar.style.left = "-303px";
-        newsfeed.style.marginLeft = "0";
-      } else {
-        sidebar.style.left = "-3px";
-        newsfeed.style.marginLeft = "300px";
-      }
-    }
-
     function setNumLikes(postId) {
       var likedPost = document.getElementById(postId);
-      var likeButton = likedPost.querySelector('#like-btn');
+      var likeButton = likedPost.querySelector('.like-btn');
       var numLikesEntity = likedPost.querySelector('#num-likes');
       var emoji = likeButton.querySelector("div");
       var numLikes = numLikesEntity.innerHTML;

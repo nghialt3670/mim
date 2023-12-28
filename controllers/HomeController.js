@@ -1,5 +1,6 @@
 const PostModel = require('../models/PostModel');
 const UserModel = require('../models/UserModel');
+const helper = require('../helper')
 
 
 const HomeController = {
@@ -27,7 +28,7 @@ const HomeController = {
         liked: user.likedPosts.findIndex(likedPost => (likedPost._id.equals(post._id))) !== -1 ? true : false
       }));
 
-		  res.render('home', { user: user, posts: postDtos });
+		  res.render('home', { user: user, posts: postDtos, helper: helper });
     } catch (error) {
       console.error(error);
       // Handle internal server error

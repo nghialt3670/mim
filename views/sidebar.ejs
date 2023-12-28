@@ -1,0 +1,23 @@
+<div id="sidebar">
+  <div id="user-navigation">
+    <a href="/">Newsfeed</a>
+    <a href="/profile/<%= user.username %>">My Profile</a>
+    <a href="/liked-post">Liked Meme</a>
+    <a href="/post-upload">Upload Meme</a>
+    <a href="/logout">Log Out</a>
+  </div>
+</div>
+<script>
+  function toggleSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    var newsfeed = document.querySelector('.newsfeed');
+
+    if (sidebar.style.left === "-3px") {
+      sidebar.style.left = "-303px";
+      newsfeed.style.marginLeft = "0";
+    } else {
+      sidebar.style.left = "-3px";
+      newsfeed.style.marginLeft = "300px";
+    }
+  }
+</script>
