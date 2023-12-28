@@ -18,6 +18,7 @@ const HomeController = {
       // Map post model data to post dto 
       const postDtos = posts.map(post => ({
         id: post._id,
+        timeCreate: post.timeCreate,
         author: post.author.username,
         avatar: post.author.avatar,
         caption: post.caption,

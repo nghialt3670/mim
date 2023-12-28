@@ -77,7 +77,8 @@ input:focus {
 
 #upload-caption {
   width: 96%;
-  font-size: small;
+  font-size: medium;
+  font-weight: normal;
 }
 
 #image-preview {
@@ -171,11 +172,17 @@ input[type="file"] {
   font-size: large;
   font-weight: bold;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .post #caption {
   margin-left: 10px;
+}
+
+.post-header {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
 }
 
 .avatar-username {
@@ -293,4 +300,71 @@ input[type="file"] {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.post-header {
+  position: relative;
+}
+
+.post-options {
+  position: absolute;
+  display: inline-block;
+  right: 10px;
+}
+
+.post-options-btn {
+  font-size: xx-small;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 30px;
+  height: 30px;
+}
+
+.post-options-btn:hover {
+  position: relative;
+  background-color: #69cbd3;
+}
+
+.post-options-btn img{
+  width: 100%;
+  
+}
+
+.post-options-menu {
+  display: none;
+  position: absolute;
+  background-color: transparent;
+  width: fit-content;
+}
+
+.post-options-menu button {
+  display: block;
+  padding: 8px;
+  margin-bottom: 5px;
+  text-align: left;
+  font-size: x-small;
+  font-weight: normal;
+  width: 60px;
+  background-color: #a276ba;
+}
+
+.time {
+  font-size: small;
+  font-weight: normal;
+  text-align: center;
+  width: fit-content;
+}
+
+.username-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.likes-container {
+  display: flex;
+  align-items: center; /* Align items vertically in the container */
 }
