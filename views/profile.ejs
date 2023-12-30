@@ -14,15 +14,19 @@
     </button>
     <div class="post-list">
       <div id="profile-container" class="container">
-        <img class="avatar" src="<%= profile.avatar ? 'data:' + profile.avatar.imageContentType + ';base64,' + (profile.avatar.data ? profile.avatar.data.toString('base64') : '') : '' %>" alt="Avatar">
-        <h4 class="username"><%= profile.username %></h4>
-        <!-- <% if (isOwnProfile) { %>
-        <div class="options">
-          <button class="edit-btn">
-            <img src="/images/edit_icon.png" alt="">
+        <label class="avatar-input">
+          <img class="avatar" id="avatar-image" src="<%= profile.avatar ? 'data:' + profile.avatar.imageContentType + ';base64,' + (profile.avatar.data ? profile.avatar.data.toString('base64') : '') : '' %>" alt="Avatar">
+        </label>
+        <% if (isOwnProfile) { %>
+        <div class="edit-avatar">
+          <button class="edit-btn" id="edit-avatar-btn" onclick="handleEditAvatar()">
+            <img src="/images/upload_icon.png" alt="">
           </button>
+          <!-- Hidden file input for avatar upload -->
+          <input type="file" accept="image/*" id="avatar-input" style="display: none">
         </div>
-        <% } %> -->
+        <% } %>
+        <h4 class="username"><%= profile.username %></h4>
       </div>
       <% if (profile.posts.length > 0) { %>
         <ul>
@@ -190,11 +194,58 @@
         });
 
         document.location.reload();
+      } 
+    }
+
+    function handleEditAvatar() {
+      var profileContainer = document.getElementById('profile-container');
+      var avatarImage = profileContainer.querySelector('.avatar');
+      var editBtnElement = profileContainer.querySelector('.edit-btn');
+
+      var tickIconPath = '/images/tick_icon.png';
+      var editIconPath = '/images/upload_icon.png';
+      var imageElement = editBtnElement.querySelector('img');
+
+      if (imageElement.src.endsWith(editIconPath)) {
+        imageElement.src = tickIconPath;
+
+        // Create a file input dynamically
+        var fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.accept = 'image/*';
+        fileInput.style.display = 'none'; // Hide the file input
+
+        // Set an event listener for file selection
+        fileInput.addEventListener('change', function (event) {
+          var selectedFile = event.target.files[0];
+          if (selectedFile) {
+            // Display the selected image, you can customize this part as needed
+            avatarImage.src = URL.createObjectURL(selectedFile);
+            handleAvatarUpload(selectedFile);
+          }
+        });
+
+        // Append the file input to the body and trigger a click on it
+        document.body.appendChild(fileInput);
+        fileInput.click();
+        document.body.removeChild(fileInput); // Remove the file input from the body after click
       } else {
-        // User clicked Cancel
-        // alert('Removal canceled.');
+        imageElement.src = editIconPath;
+        document.location.reload();
       }
     }
+
+    function handleAvatarUpload(file) {
+      // Perform actions with the selected avatar file, for example:
+      const formData = new FormData();
+      formData.append('avatar', file);
+
+      fetch('/update-avatar', {
+        method: 'POST',
+        body: formData,
+      })
+    }
+
   </script>
 </body>
 </html>

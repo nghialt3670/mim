@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 
+const MONGODB_CONNECT_URI = ""
 
 // Creating an instance of the Express application.
 const app = express();
@@ -11,7 +12,7 @@ const app = express();
 const PORT = 3000;
 
 // Connecting to the MongoDB database named 'mim'.
-mongoose.connect('mongodb://localhost/mim');
+mongoose.connect(process.env.MONGODB_CONNECT_URI);
 
 // Middleware to parse JSON
 app.use(express.json());

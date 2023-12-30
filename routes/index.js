@@ -48,9 +48,17 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 })
 
-router.get('/profile/:username', (req, res) => {
+router.get('/profile/:username?', (req, res) => {
   if (req.session.userId) {
     ProfileController.handleLoadProfile(req, res);
+    return;
+  }
+  res.redirect('/')
+});
+
+router.get('/liked-post', (req, res) => {
+  if (req.session.userId) {
+    HomeController.handleLoadLikedPost(req, res);
     return;
   }
   res.redirect('/')
@@ -67,6 +75,8 @@ router.post('/update-like', LikeController.handleUpdateLike);
 router.post('/edit-caption', PostController.handleEditCaption);
 
 router.post('/delete-post', PostController.handleDeletePost);
+
+router.post('/update-avatar', upload.single('avatar'), PostController.handleUpdateAvatar);
 
 
 module.exports = router;

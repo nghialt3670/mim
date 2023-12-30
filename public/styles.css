@@ -79,9 +79,11 @@ input:focus {
   width: 96%;
   font-size: medium;
   font-weight: normal;
+
 }
 
 #image-preview {
+  width: 500px;
   max-width: 100%;
   margin: 10px 0px;
   padding: 0px;
@@ -109,6 +111,9 @@ input[type="file"] {
 
 .avatar {
   border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
+  object-position: center;
 }
 
 .newsfeed {
@@ -139,11 +144,11 @@ input[type="file"] {
   display: flex;
   flex-direction: column;
   width: 500px;
-  background-color: #ffffffc6;
+  background-color: #dbfefb83;
   margin-top: 10px;
   margin-bottom: 50px;
   border-radius: 10px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Adjust values as needed */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
 }
 
 .post a {
@@ -186,15 +191,12 @@ input[type="file"] {
   font-weight: bold;
   display: flex;
   align-items: flex-start;
-  transition: 0.3s;
-}
-
-.post .username:hover {
-  transform: scale(1.1);
 }
 
 .post #caption {
-  margin-left: 10px;
+  max-width: 100%; /* Set a maximum width for the element */
+  word-wrap: break-word; /* Allow the content to break onto a new line */
+  margin: 10px;
 }
 
 .post-header {
@@ -214,7 +216,7 @@ input[type="file"] {
   position: fixed;
   top: 0;
   left: -303px;
-  background-color: #ffffffd1;
+  background-color: #dbfefb83;
   padding-top: 10px;
   transition: 0.5s;
   display: flex;
@@ -223,30 +225,6 @@ input[type="file"] {
 
 #sidebar a {
   text-decoration: none;
-}
-
-#sidebar .avatar {
-  height: 50px;
-  width: 50px;
-  margin-right: 10px;
-}
-
-#sidebar .avatar-username {
-  padding: 10px;
-  margin-left: 10px;
-  display: flex;
-  flex-direction: row;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-#sidebar .username {
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  font-size: x-large;
-  color: black
 }
 
 #user-navigation {
@@ -265,12 +243,7 @@ input[type="file"] {
 }
 
 #user-navigation a:hover {
-  transform: scale(1.2);
-}
-
-#caption {
-  font-size: large;
-  margin: 10px 5px;
+  transform: scale(1.1);
 }
 
 #sidebar-toggle-btn {
@@ -279,8 +252,13 @@ input[type="file"] {
   top: 0px;
   height: 40px;
   width: 40px;
-  background-color: #4b75cadf;
+  background-color: transparent;
   padding: 7px;
+  transition: 0.3s;
+}
+
+#sidebar-toggle-btn:hover {
+  transform: scale(1.2);
 }
 
 
@@ -293,9 +271,16 @@ input[type="file"] {
   display: none;
 }
 
+
+
 .container .avatar {
   width: 200px;
   margin-top: 20px;
+  cursor: pointer;
+  border-radius: 50%;
+  overflow: hidden;
+  object-fit: cover;
+  object-position: center;
 }
 
 .container .username {
@@ -304,19 +289,19 @@ input[type="file"] {
 }
 
 .profile .container {
+  height: fit-content;
   margin-top: 10px;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   width: 500px;
-  background-color: #ffffffc6;
+  background-color: #dbfefb83;
   border-radius: 10px;  
-  height: fit-content;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
 }
 
 .profile {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
@@ -373,3 +358,23 @@ button img {
   max-height: 100%;
 }
 
+.edit-avatar {
+  position: relative;
+  right: 0px;
+}
+
+.edit-avatar button {
+  background-color: transparent;
+  transition: 0.3s;
+}
+
+.edit-avatar button:hover {
+  transform: scale(1.2);
+}
+
+#avatar-image {
+  width: 250px;
+  height: 250px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+
+}

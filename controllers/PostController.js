@@ -92,6 +92,29 @@ const PostController = {
       // Handle internal server error
       res.status(500).send('Internal Server Error');
     }
+  },
+
+  handleUpdateAvatar: async (req, res) => {
+    try {
+      const userId = req.session.userId;
+
+      // Create a new avatar in the Image collection
+      const newAvatar = new ImageModel({
+        data: req.file.buffer,
+        contentType: req.file.mimetype,
+        type: "user-avatar"
+      });
+
+      const savedAvatar = await newAvatar.save();
+
+      // Update the user's avatar reference in the User collection
+      await UserModel.findByIdAndUpdate(userId, { avatar: savedAvatar._id });
+
+      res.status(200).json({ success: true, message: 'Avatar updated successfully' });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Internal server error' });
+    }
   }
 }
 

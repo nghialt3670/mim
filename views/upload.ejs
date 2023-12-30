@@ -7,6 +7,10 @@
   <title>Upload Your Meme</title>
 </head>
 <body>
+  <%- include('sidebar.ejs') %>
+  <button id="sidebar-toggle-btn" onclick="toggleSidebar()">
+    <img src="/images/menu_icon.png" alt="">
+  </button>
   <div class="container">
     <form id="upload-form" class="form" action="/post-upload" method="post" enctype="multipart/form-data" onsubmit="setTime()">
       <input type="text" name="caption" id="upload-caption" placeholder="Enter your caption" autocomplete="off">

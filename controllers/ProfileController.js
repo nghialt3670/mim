@@ -3,17 +3,22 @@ const helper = require('../helper')
 
 const ProfileController = {
   handleLoadProfile: async (req, res) => {
-    const username = req.params.username;
+    let username = req.params.username;
 
+    
     const user = await UserModel.findById(req.session.userId);
     const likedPosts = user.likedPosts;
+    if (!username) {
+      username = user.username;
+    }
 
-    const profileUser = await UserModel.findOne({ username: username })
+    let profileUser = await UserModel.findOne({ username: username })
       .populate('avatar')
       .populate({ path: 'ownPosts', populate: [
         {path: 'author', select: 'username avatar', populate: { path: 'avatar' }},
         {path: 'image'}
       ]}); 
+
 
     const postDtos = profileUser.ownPosts
       .sort((a, b) => (new Date(b.timeCreate) - new Date(a.timeCreate)))  
