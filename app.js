@@ -9,7 +9,7 @@ const MONGODB_CONNECT_URI = ""
 const app = express();
 
 // Defining the port number for the server to listen on.
-const PORT = 3000;
+const PORT = 3000 | process.env.PORT;
 
 // Connecting to the MongoDB database named 'mim'.
 mongoose.connect(process.env.MONGODB_CONNECT_URI);
