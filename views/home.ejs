@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="/images/logo.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/images/logo.ico" type="image/x-icon">
   <title>Mim</title>
 </head>
 <body>
@@ -51,6 +53,46 @@
     </div>
   </div>
 	<script>
+    document.querySelector('.newsfeed').addEventListener('scroll', function() {
+      var newsfeed = this;
+
+      // Check if the user has scrolled to the end
+      if (newsfeed.scrollTop + newsfeed.clientHeight >= newsfeed.scrollHeight * 0.9) {
+        loadMorePosts();
+      }
+    });
+    // Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+    function adjustTime(utcTimeString) {
+      const utcTime = new Date(utcTimeString);
+      const currentTime = new Date();
+      const timeDifference = currentTime - utcTime;
+
+      // Convert milliseconds to seconds
+      const seconds = Math.floor(timeDifference / 1000);
+
+      if (seconds < 60) {
+        return seconds === 1 ? "1 second ago" : seconds + " seconds ago";
+      } else if (seconds < 3600) {
+        const minutes = Math.floor(seconds / 60);
+        return minutes === 1 ? "1 minute ago" : minutes + " minutes ago";
+      } else if (seconds < 86400) {
+        const hours = Math.floor(seconds / 3600);
+        return hours === 1 ? "1 hour ago" : hours + " hours ago";
+      } else if (seconds < 2592000) {
+        const days = Math.floor(seconds / 86400);
+        return days === 1 ? "1 day ago" : days + " days ago";
+      } else if (seconds < 31536000) {
+        const months = Math.floor(seconds / 2592000);
+        return months === 1 ? "1 month ago" : months + " months ago";
+      } else {
+        const years = Math.floor(seconds / 31536000);
+        return years === 1 ? "1 year ago" : years + " years ago";
+      }
+    }
+
+    let loading = false;
+    let offset = 5;
+
     function setTime() {
       const currentTime = new Date();
       document.getElementById('timeCreate').value = currentTime.toISOString();
@@ -84,6 +126,134 @@
         },
         body: JSON.stringify({ postId: postId }),
       });
+    }
+
+    function loadMorePosts() {
+
+      if (loading) {
+        return;
+      }
+
+      loading = true;
+      // Send AJAX request to fetch more posts
+      fetch(`/api/posts?offset=${offset}`)
+      .then(response => response.json())
+      .then(data => {
+        const { user, posts, helper } = data
+        if (posts.length > 0) {
+          const postsContainer = document.querySelector('.post-list ul');
+          posts.forEach(post => {
+            const li = document.createElement('li');
+            li.id = post.id;
+            li.className = 'post';
+
+            // Create the avatar and username container
+            const avatarUsernameDiv = document.createElement('div');
+            avatarUsernameDiv.className = 'avatar-username';
+
+            const avatarImg = document.createElement('img');
+            avatarImg.className = 'avatar';
+            avatarImg.src = post.avatar ? `data:${post.avatar.contentType};base64,${arrayBufferToBase64(post.avatar.data.data)}` : '';
+            avatarImg.alt = 'Avatar';
+
+            const usernameContainerDiv = document.createElement('div');
+            usernameContainerDiv.className = 'username-container';
+
+            const usernameLink = document.createElement('a');
+            usernameLink.href = `/profile/${post.author}`;
+            usernameLink.className = 'username';
+            usernameLink.textContent = post.author;
+
+            const timeDiv = document.createElement('div');
+            timeDiv.className = 'time';
+            timeDiv.textContent = adjustTime(post.timeCreate);
+
+            usernameContainerDiv.appendChild(usernameLink);
+            usernameContainerDiv.appendChild(timeDiv);
+
+            avatarUsernameDiv.appendChild(avatarImg);
+            avatarUsernameDiv.appendChild(usernameContainerDiv);
+
+            // Create the caption and image elements
+            const captionP = document.createElement('p');
+            captionP.id = 'caption';
+            captionP.textContent = post.caption;
+
+            const imageImg = document.createElement('img');
+            imageImg.id = 'image';
+            imageImg.className = 'image';
+            imageImg.src = `data:${post.image.contentType};base64,${arrayBufferToBase64(post.image.data.data)}`;
+            imageImg.alt = 'Image';
+
+            // Create the like button and likes container
+            const likeDiv = document.createElement('div');
+            likeDiv.id = 'like';
+
+            const likeButton = document.createElement('button');
+            likeButton.className = 'like-btn';
+            likeButton.setAttribute('onclick', `handleLike('${post.id}', '${user.username}')`);
+
+            const emojiDiv = document.createElement('div');
+            emojiDiv.innerHTML = post.liked ? '&#128514' : '&#128528';
+
+            const likesContainerDiv = document.createElement('div');
+            likesContainerDiv.className = 'likes-container';
+
+            const numLikesDiv = document.createElement('div');
+            numLikesDiv.id = 'num-likes';
+            numLikesDiv.textContent = post.numLikes;
+
+            const hahaEmojiDiv = document.createElement('div');
+            hahaEmojiDiv.id = 'haha-emoji';
+            hahaEmojiDiv.className = 'no-display';
+            hahaEmojiDiv.innerHTML = '&#128528';
+
+            numLikesDiv.style.marginRight = '8px';
+
+            likesContainerDiv.appendChild(document.createTextNode('('));
+            likesContainerDiv.appendChild(numLikesDiv);
+            likesContainerDiv.appendChild(document.createTextNode('haha)'));
+            likesContainerDiv.appendChild(hahaEmojiDiv);
+
+            likeButton.appendChild(post.liked ? emojiDiv : emojiDiv.cloneNode(true));
+            likeDiv.appendChild(likeButton);
+            likeDiv.appendChild(likesContainerDiv);
+
+            li.appendChild(avatarUsernameDiv);
+            li.appendChild(captionP);
+            li.appendChild(imageImg);
+            li.appendChild(likeDiv);
+
+            postsContainer.appendChild(li);
+          });
+
+          offset += posts.length; // Update the offset
+        }
+
+        loading = false;
+      })
+      .catch(error => {
+        console.error(error);
+        loading = false;
+      });
+    }
+
+    window.onscroll = function() {
+      console.log(window.innerHeight + window.scrollY);
+      console.log(document.documentElement.offsetHeight - 300);
+      
+    };
+
+    // Initial load
+    loadMorePosts();
+
+    function arrayBufferToBase64(buffer) {
+      let binary = '';
+      const bytes = new Uint8Array(buffer);
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
     }
   </script>
 </body>

@@ -64,6 +64,8 @@ router.get('/liked-post', (req, res) => {
   res.redirect('/')
 });
 
+router.get('/api/posts', PostController.handleLoadNewsfeed)
+
 router.post('/register', RegisterController.handleRegister);
 
 router.post('/login', LoginController.handleLogin);

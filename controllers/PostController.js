@@ -2,6 +2,7 @@ const ImageModel = require('../models/ImageModel');
 const PostModel = require('../models/PostModel');
 const UserModel = require('../models/UserModel');
 const LikeModel = require('../models/LikeModel')
+const helper = require('../helper')
 
 
 const PostController = {
@@ -115,7 +116,40 @@ const PostController = {
       console.error(error);
       res.status(500).json({ success: false, message: 'Internal server error' });
     }
+  },
+
+  handleLoadNewsfeed: async (req, res) => {
+    try {
+      const userId = req.session.userId;
+      const user = await UserModel.findById(userId).populate('avatar');
+      const offset = req.query.offset || 0;
+      const limit = 5; // Set the number of posts to load each time
+      const posts = await PostModel.find({})
+        .populate({ path: 'author', select: 'username avatar', populate: { path: 'avatar' } })
+        .populate('image')
+        .sort({ timeCreate: -1 })
+        .skip(offset)
+        .limit(limit)
+        .exec();
+
+      const postDtos = posts.map(post => ({
+        // Map post model data to post dto
+        id: post._id,
+        timeCreate: post.timeCreate,
+        author: post.author.username,
+        avatar: post.author.avatar,
+        caption: post.caption,
+        image: post.image,
+        numLikes: post.likes.length,
+        // Check if the post is liked by the user
+        liked: user.likedPosts.findIndex(likedPost => (likedPost._id.equals(post._id))) !== -1 ? true : false
+      }));
+      res.json({ user: user, posts: postDtos, helper: helper});
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Internal Server Error');
+    }
   }
 }
 
-module.exports = PostController
+module.exports = PostController;

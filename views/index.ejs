@@ -4,13 +4,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="/images/logo.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="/images/logo.ico" type="image/x-icon">
   <title>Mim: Share Your Memes</title>
 </head>
 <body>
   <div class="container">
+    <img class="logo" src="/images/logo.png" alt="Logo">
     <h1>Welcome to Mim!</h1>
-    <button class="login-redirect-btn" onclick="redirectToLogin()">Log In</button>
-    <button class="register-redirect-btn" onclick="redirectToRegister()">Register</button>
+    <div id="login-register-redirect">
+      <button class="login-redirect-btn" onclick="redirectToLogin()">Log In</button>
+      <button class="register-redirect-btn" onclick="redirectToRegister()">Register</button>
+    </div>
   </div>
   <script>
     function redirectToLogin() {

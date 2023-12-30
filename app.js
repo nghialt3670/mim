@@ -5,7 +5,10 @@ const session = require('express-session');
 
 const app = express();
 
+require('dotenv').config();
+
 const PORT = process.env.PORT || 3000;
+
 
 mongoose.connect(process.env.MONGODB_CONNECT_URI);
 

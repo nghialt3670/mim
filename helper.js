@@ -10,7 +10,7 @@ function adjustTime(utcTimeString) {
   const seconds = Math.floor(timeDifference / 1000);
 
   if (seconds < 60) {
-    return seconds === 1 ? "1 second ago" : seconds + " seconds ago";
+    return " a few seconds ago";
   } else if (seconds < 3600) {
     const minutes = Math.floor(seconds / 60);
     return minutes === 1 ? "1 minute ago" : minutes + " minutes ago";
