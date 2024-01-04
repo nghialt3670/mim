@@ -7,7 +7,7 @@
 *Follow the MVC pattern*
 
 
-### [Live](https://mim-8hjf.onrender.com/)
+### [Link to website](https://mim-8hjf.onrender.com/)
 
 ### Installation
 
