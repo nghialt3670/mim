@@ -1,4 +1,4 @@
-### <p align="center"><img width="150px" height="150px" src=""></p>
+### <p align="center"><img width="150px" height="150px" src="https://raw.githubusercontent.com/nghialt3670/mim/dev/images/icon.png"></p>
 
 # [MVC Web Application](https://mim-8hjf.onrender.com/)
 
