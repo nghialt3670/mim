@@ -158,23 +158,23 @@ const PostController = {
 
       const userId = req.session.userId;
       const user = await UserModel.findById(userId)
-      .populate('avatar')
-      .populate({
-        path: 'likedPosts',
-        select: 'author image likes timeCreate',
-        options: {
-          skip: offset,  // Skip the specified number of documents
-          limit: limit,  // Limit the number of documents returned
-        },
-        populate: [
-          { path: 'author', select: 'username avatar', populate: { path: 'avatar' } },
-          { path: 'image' },
-          { path: 'likes', populate: { path: 'user' } },
-        ]
-      })
-      .exec();
+        .populate('avatar')
+        .populate({
+          path: 'likedPosts',
+          select: 'author image likes timeCreate caption',
+          populate: [
+            { path: 'author', select: 'username avatar', populate: { path: 'avatar' } },
+            { path: 'image' },
+            { path: 'likes', populate: { path: 'user' } },
+          ]
+        })
+        .exec();
 
-      const likedPosts = user.likedPosts.reverse()
+      // Reverse the likedPosts array
+      let likedPosts = user.likedPosts.reverse();
+
+      // Apply offset and limit to get the desired subset of posts
+      likedPosts = likedPosts.slice(offset, offset + limit);
 
       // Map post model data to post dto 
       const postDtos = likedPosts.map(post => ({ 
@@ -187,7 +187,6 @@ const PostController = {
         numLikes: post.likes.length,
         liked: user.likedPosts.findIndex(likedPost => (likedPost._id.equals(post._id))) !== -1 ? true : false
       }));
-      console.log(postDtos.length)
 
 
       res.setHeader('Cache-Control', 'no-store, must-revalidate');

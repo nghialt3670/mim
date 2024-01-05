@@ -45,42 +45,55 @@ const HomeController = {
     }  
 	},
 
-  handleLoadLikedPosts: async (req, res) => {
-    const userId = req.session.userId;
-    const user = await UserModel.findById(userId).populate('avatar')
-    .populate({ 
-      path: 'likedPosts', 
-      select: 'author image likes timeCreate', 
-      populate: [
-        { path: 'author', select: 'username avatar', populate: { path: 'avatar' } },
-        { path: 'image'},
-        { path: 'likes', populate: { path: 'user' } }
-      ]})
+  handleLoadLikedPosts: async (req, res) => { 
+    try {
+      const offset = req.query.offset || 0;
+      const limit = 5; // Set the number of posts to load each time
+      const userId = req.session.userId;
+
+      const user = await UserModel.findById(userId)
+      .populate('avatar')
+      .populate({
+        path: 'likedPosts',
+        select: 'author image likes timeCreate caption',
+        populate: [
+          { path: 'author', select: 'username avatar', populate: { path: 'avatar' } },
+          { path: 'image' },
+          { path: 'likes', populate: { path: 'user' } },
+        ]
+      })
       .exec();
 
+      // Reverse the likedPosts array
+      let likedPosts = user.likedPosts.reverse();
 
-    const likedPosts = user.likedPosts.reverse()
+      // Apply offset and limit to get the desired subset of posts
+      likedPosts = likedPosts.slice(offset, offset + limit);
 
-    // Map post model data to post dto 
-    const postDtos = likedPosts.map(post => ({ 
-      id: post._id,
-      timeCreate: post.timeCreate,
-      author: post.author.username,
-      avatar: post.author.avatar,
-      caption: post.caption,
-      image: post.image,
-      numLikes: post.likes.length,
-      liked: user.likedPosts.findIndex(likedPost => (likedPost._id.equals(post._id))) !== -1 ? true : false
-    }));
-    console.log(postDtos.length)
+      // Map post model data to post dto 
+      const postDtos = likedPosts.map(post => ({ 
+        id: post._id,
+        timeCreate: post.timeCreate,
+        author: post.author.username,
+        avatar: post.author.avatar,
+        caption: post.caption,
+        image: post.image,
+        numLikes: post.likes.length,
+        liked: user.likedPosts.findIndex(likedPost => (likedPost._id.equals(post._id))) !== -1 ? true : false
+      }));
 
+      res.setHeader('Cache-Control', 'no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
 
-    res.setHeader('Cache-Control', 'no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-
-    res.render('home', { user: user, posts: postDtos, helper: helper });
+      res.render('home', { user: user, posts: postDtos, helper: helper });
+    } catch {
+      console.error(error);
+      // Handle internal server error
+      res.status(500).send('Internal Server Error');
+    }
   }
+    
 };
 
 module.exports = HomeController;
