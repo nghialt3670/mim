@@ -135,11 +135,13 @@
       }
 
       loading = true;
+      endpoint = window.location.pathname;
+      if (endpoint == '/') endpoint = '/posts';
       // Send AJAX request to fetch more posts
-      fetch(`/api/posts?offset=${offset}`)
+      fetch(`/api${endpoint}?offset=${offset}`) 
       .then(response => response.json())
       .then(data => {
-        const { user, posts, helper } = data
+        const { user, posts, helper } = data 
         if (posts.length > 0) {
           const postsContainer = document.querySelector('.post-list ul');
           posts.forEach(post => {
@@ -237,12 +239,6 @@
         loading = false;
       });
     }
-
-    window.onscroll = function() {
-      console.log(window.innerHeight + window.scrollY);
-      console.log(document.documentElement.offsetHeight - 300);
-      
-    };
 
     // Initial load
     loadMorePosts();

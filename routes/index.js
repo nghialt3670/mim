@@ -56,15 +56,17 @@ router.get('/profile/:username?', (req, res) => {
   res.redirect('/')
 });
 
-router.get('/liked-post', (req, res) => {
+router.get('/liked-posts', (req, res) => {
   if (req.session.userId) {
-    HomeController.handleLoadLikedPost(req, res);
+    HomeController.handleLoadLikedPosts(req, res);
     return;
   }
   res.redirect('/')
 });
 
 router.get('/api/posts', PostController.handleLoadNewsfeed)
+
+router.get('/api/liked-posts', PostController.handleLoadLikedPosts)
 
 router.post('/register', RegisterController.handleRegister);
 

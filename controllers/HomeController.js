@@ -45,7 +45,7 @@ const HomeController = {
     }  
 	},
 
-  handleLoadLikedPost: async (req, res) => {
+  handleLoadLikedPosts: async (req, res) => {
     const userId = req.session.userId;
     const user = await UserModel.findById(userId).populate('avatar')
     .populate({ 
@@ -57,6 +57,7 @@ const HomeController = {
         { path: 'likes', populate: { path: 'user' } }
       ]})
       .exec();
+
 
     const likedPosts = user.likedPosts.reverse()
 
@@ -71,6 +72,8 @@ const HomeController = {
       numLikes: post.likes.length,
       liked: user.likedPosts.findIndex(likedPost => (likedPost._id.equals(post._id))) !== -1 ? true : false
     }));
+    console.log(postDtos.length)
+
 
     res.setHeader('Cache-Control', 'no-store, must-revalidate');
     res.setHeader('Pragma', 'no-cache');
